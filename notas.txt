@@ -31,3 +31,6 @@ Documento::where(
 /*Documento::where('id',1)
 ->where('tipo',1)
 ->delete();*/
+
+
+----	
