@@ -1,0 +1,33 @@
+//Agregar
+/*Documento::create([
+
+	'descripcion' => 'Certificados de Trabajo',
+	'tipo'	=> 	2,
+	'estado'	=> 'pendiente'
+
+]);*/
+
+//Actualizar
+/*
+Documento::where('id',1)
+->where('tipo',1)
+->update([ 'descripcion' => 'Contratos Temporales' ]);
+
+Documento::where(
+
+	['id'=>1],
+	['tipo'=>1]
+
+)
+->update([ 'descripcion' => 'Contratos Temporales Nuevos' ]);
+*/
+
+//Select
+//$result = Documento::get();
+
+//return $result;
+
+//DELete
+/*Documento::where('id',1)
+->where('tipo',1)
+->delete();*/
