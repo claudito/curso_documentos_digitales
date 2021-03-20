@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -24,7 +25,15 @@ PUT
 DELETE
 */
 
+//Home
+Route::get('/home', 'HomeController@index')->name('home');
+
+Auth::routes();
+
+
 //Documentos
-Route::get('documentos','DocumentoController@index')->name('documentos.index');
+Route::get('documentos','DocumentoController@index')->name('documentos.index')->middleware('auth');
+
+Route::resource('usuario','UserController')->middleware('auth');//usuario.index
 
 

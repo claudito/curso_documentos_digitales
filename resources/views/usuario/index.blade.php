@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-Documentos
+Usuarios
 @endsection
 
 @section('content')
@@ -13,9 +13,9 @@ Documentos
 						<thead>
 							<tr>
 								<th>Id</th>
-								<th>Descripcion</th>
-								<th>Tipo</th>
-								<th>Estado</th>
+								<th>Nombres</th>
+								<th>Apellidos</th>
+								<th>N° de Documento</th>
 								<th>Fecha de Creación</th>
 							</tr>
 						</thead>
@@ -39,17 +39,17 @@ Documentos
 		},
 		ajax:{
 
-			url:'{{ route('documentos.index') }}',
+			url:'{{ route('usuario.index') }}',
 			type:'GET'
 
 		},
 		columns:[
 
 			{ data:'id' },
-			{ data:'descripcion'},
-			{ data:'tipo'},
-			{ data:'estado'},
-			{ data:'fecha_creacion'}
+			{ data:'nombres' },
+			{ data:'apellidos' },
+			{ data:'document_number' },
+			{ data:'created_at' }
 
 		]
 

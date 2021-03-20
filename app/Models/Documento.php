@@ -10,5 +10,6 @@ class Documento extends Model
 	protected $table = "documentos";
 
 	protected $guarded = ['id'];
+	#Guarded solo inserta los registros requeridos por la tabla ( not null)
 
 }
