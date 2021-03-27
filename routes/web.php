@@ -31,9 +31,21 @@ Route::get('/home', 'HomeController@index')->name('home');
 Auth::routes();
 
 
-//Documentos
-Route::get('documentos','DocumentoController@index')->name('documentos.index')->middleware('auth');
+Route::middleware('auth')->group(function(){//Seguridad
 
-Route::resource('usuario','UserController')->middleware('auth');//usuario.index
+	Route::prefix('mantenimientos')->group(function(){//Visual/Organización
+
+		//Documentos
+		Route::get('documentos','DocumentoController@index')->name('documentos.index');
+
+		//Usuario
+		Route::resource('usuario','UserController');
+
+	});
+
+});
+
+
+
 
 

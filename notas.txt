@@ -34,3 +34,10 @@ Documento::where(
 
 
 ----	
+Cuenta Gmail:
+https://github.com/PHPMailer/PHPMailer/blob/master/examples/gmail.phps
+
+smtp.gmail.com
+587
+tallerlaravel7notificaciones@gmail.com
+taller2021

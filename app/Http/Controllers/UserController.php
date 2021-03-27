@@ -45,7 +45,21 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        //dd( $request->all() );
+
+        if( $request->id ){
+
+            $result = User::actualizacion(  $request->all() );
+
+        }else{
+
+             $result = User::registro(  $request->all() );
+        }
+
+        return $result;
+
+
     }
 
     /**
@@ -67,7 +81,11 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+    
+        $result = User::where('id',$id)->first();
+
+        return $result;
+
     }
 
     /**
@@ -88,8 +106,20 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
-        //
+        $active = ( $request->active == 0 ) ? 1 : 0 ;
+
+        User::where('id',$id)->update(['active'=>$active]);
+
+        return [
+
+            'title' => 'Buen Trabajo',
+            'text'  => 'Estado Actualizado',
+            'icon'  => 'success'
+
+        ];
+
+
     }
 }
