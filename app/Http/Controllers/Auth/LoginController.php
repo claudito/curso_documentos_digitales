@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Auth;
+use App\User;
 
 class LoginController extends Controller
 {
@@ -37,4 +39,47 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    public function login(){
+
+        $document_number = request('document_number');
+
+        $user            = User::where('document_number',$document_number)->first();
+
+        if( $user ){//El usuario ingresado existe
+
+            if( $user->active ){ //Si active es igual a 1
+
+                $credentials = $this->validate(request(),[
+
+                    'document_number'=> 'required|string',
+                    'password'=> 'required|string'
+
+                ]);
+                
+                if( Auth::attempt($credentials) ){
+
+                    return redirect()->intended('home');
+
+                }
+
+                return back()->withInput()->withErrors(['document_number'=>'El Usuario o Contraseña son Incorrectos']);
+
+
+            }else{
+
+                 return back()->withInput()->withErrors(['document_number'=>'El Usuario ingresado se encuentra Inactivo']);
+            }
+
+
+        }else{ //El usuario ingresado no existe
+
+            return back()->withInput()->withErrors(['document_number'=>'El Usuario ingresado no esta registrado en nuestra plataforma.']);
+
+        }
+
+
+    }
+
+
 }

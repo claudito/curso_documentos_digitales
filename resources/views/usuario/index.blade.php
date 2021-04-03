@@ -97,7 +97,12 @@ Usuarios
 
 		$('#consulta').DataTable({
 
+			bAutoWidth: false,
 			destroy:true,
+			deferRender:true,
+			bProcessing: true,
+			iDisplayLength: 50,
+			order:[[5,'desc'],[4,'asc']],
 			language:{
 
 				url:'{{ asset('js/spanish.json')  }}'
@@ -116,7 +121,7 @@ Usuarios
 				{ data:'apellidos' },
 				{ data:'email' },
 				{ data:'document_number' },
-				{ data:'created_at' },
+				{ data:'fecha_creacion' },
 				{ data:null,render:function(data){
 
 					if( data.active == 1 ){
@@ -162,6 +167,7 @@ Usuarios
 	$(document).on('click','.btn-agregar',function(){
 
 		$('#registro')[0].reset();
+		$('.id').val('');
 
 		$('.modal-title').html('Agregar Usuario');
 		$('.btn-submit').html('Agregar');
@@ -174,6 +180,7 @@ Usuarios
 	$(document).on('click','.btn-edit',function(){
 
 		$('#registro')[0].reset();
+		$('.id').val('');
 
 		id =  $(this).data('id');
 

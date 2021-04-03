@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use DB;
+use Illuminate\Support\Facades\Hash;
+use App\LogError;
+use App\Message;
 
 class UserController extends Controller
 {
@@ -17,7 +21,17 @@ class UserController extends Controller
         
         if( $request->ajax() ){
 
-            $result = User::all();
+            $result = User::select(DB::raw("
+
+                id,
+                nombres,
+                apellidos,
+                document_number,
+                email,
+                active,
+                DATE_FORMAT(created_at,'%d/%m/%Y %H:%i:%s')fecha_creacion
+            "))
+            ->get();
 
             return ['data'=>$result];
         }
@@ -44,20 +58,119 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
 
-        //dd( $request->all() );
+        try {
+            
+            $user = User::where('id',$request->id)->first();
 
-        if( $request->id ){
+            if( $user ){
 
-            $result = User::actualizacion(  $request->all() );
+                //Validación de Correo
+                $validacion_correo = ($user->email == $request->correo) ? false : true;
 
-        }else{
+                if( $validacion_correo ){
 
-             $result = User::registro(  $request->all() );
+                    $existe = User::where('email',$request->correo)->first();
+
+                    if( $existe ){
+
+                        return Message::getMessage(3);
+
+                        return false;
+                    }
+
+                }
+
+                //Validación de Documento
+                $validacion_documento = ($user->document_number == $request->numero_documento) ? false : true;
+
+                if( $validacion_documento ){
+
+                    $existe = User::where('document_number',$request->numero_documento)->first();
+
+                    if( $existe ){
+
+                        return Message::getMessage(4);
+
+                        return false;
+                    }
+
+                }
+
+                $user->update([
+
+                    'nombres' => $request->nombres,
+                    'apellidos'=> $request->apellidos,
+                    'numero_documento'=> $request->numero_documento,
+                    'email' => $request->correo
+
+                ]);
+
+            return Message::getMessage(2);
+
+            }else{
+
+
+            $validacion_correo = User::where('email',$request->correo)->first();
+
+            //dd( $validacion_correo );
+
+            if( $validacion_correo ){
+
+                return Message::getMessage(3);
+
+                return false;
+            }
+
+           $validacion_documento = User::where('document_number',$request->numero_documento)->first();
+
+            if( $validacion_documento ){
+
+                return Message::getMessage(4);
+                return false;
+            }
+
+                User::create([
+
+                    'nombres' => $request->nombres,
+                    'apellidos' => $request->apellidos,
+                    'document_number' => $request->numero_documento,
+                    'email' => $request->correo,
+                    'password'=> Hash::make( $request->numero_documento )
+
+                ]);
+
+                return Message::getMessage(1);
+
+            }
+
+
+        } catch (\Illuminate\Database\QueryException $e) {
+
+                LogError::insert($e->getCode(),$e->getMessage());
+
+                return [
+
+                    'title' => 'Error',
+                    'text'  => $e->getCode(),
+                    'icon'  => 'error'
+
+                ];
+            
+        }catch(Exception $e){
+
+                LogError::insert($e->getCode(),$e->getMessage());
+
+                return [
+
+                    'title' => 'Error',
+                    'text'  => $e->geCode(),
+                    'icon'  => 'error'
+
+                ];
+
         }
-
-        return $result;
 
 
     }
