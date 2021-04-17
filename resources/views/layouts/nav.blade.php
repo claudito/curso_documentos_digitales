@@ -13,11 +13,20 @@
             <li class="nav-item dropdown">
                  <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">Mantenimientos</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                     <a class="dropdown-item" href="{{ route('documentos.index') }}">Documentos</a>
-                    <a class="dropdown-item" href="{{ route('usuario.index') }}">Usuarios</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                    <div class="dropdown-divider">
-                    </div> <a class="dropdown-item" href="#">Separated link</a>
+
+                    @can('Documentos')
+                        <a class="dropdown-item" href="{{ route('documentos.index') }}">Documentos</a>
+                    @endcan
+
+                    @can('Usuarios')
+                        <a class="dropdown-item" href="{{ route('usuario.index') }}">Usuarios</a>
+                    @endcan
+
+                    @can('Reportes')
+                        <a class="dropdown-item" href="#">Reportes</a>
+                    @endcan
+
+                     
                 </div>
             </li>
         </ul>

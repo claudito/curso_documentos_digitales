@@ -1,6 +1,6 @@
 <?php 
 
-Route::middleware('auth')->group(function(){//Seguridad
+Route::middleware('auth','role:admin')->group(function(){//Seguridad
 
 	Route::prefix('mantenimientos')->group(function(){//Visual/Organización
 
