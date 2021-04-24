@@ -25,6 +25,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+
+       // $schedule->command('documento:generar_certificados')->hourly();
+         $schedule->command('documento:generar_certificados')
+         ->everyMinute()
+         ->timezone('America/Lima')
+         ->name('documento_generar_certificados');
+
     }
 
     /**

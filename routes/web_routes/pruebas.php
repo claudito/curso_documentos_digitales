@@ -2,10 +2,13 @@
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\User;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
+use Dompdf\Dompdf;
+use Carbon\Carbon;
 
 
-Route::get('pruebas/index',function(){
-
+Route::get('pruebas/roles_permisos',function(){
 
 	//Crear Rol
 	//$role = Role::create(['name' => 'invitado']);
@@ -105,9 +108,100 @@ Route::get('pruebas/index',function(){
 	*/
 	//return $users;
 
+});
+
+
+Route::get('pruebas/spaces/test',function(){
+
+	$ubicacion =  "imagenes/assets";
+
+	$files 	  =  Storage::disk('spaces')->files( $ubicacion );
+
+	foreach ($files as $key => $value) {
+		
+		echo env('DO_URL').'/'.$value."<br>";
+	}
+
+});
+
+
+Route::get('pruebas/spaces/index',function(){
+
+	return view('spaces');
+
+});
+
+Route::post('pruebas/spaces/subir',function(Request $request){
+
+	$ubicacion = $request->ubicacion;
+
+	$name      = $request->file('archivo')->getClientOriginalName();
+
+
+	$path 	   = Storage::putFileAs(
+
+	    $ubicacion, $request->file('archivo'), $name,'public'
+
+	);
+
+
+	dd( env('DO_URL').'/'.$path );
+
+
+})->name('spaces.subir');
+
+
+Route::get('pruebas/dompdf',function(){
+
+	$documentos = DB::table('certificados')
+	->select(DB::raw("
+
+			id,
+			empresa,
+			ruc,
+			trabajador,
+			dni,
+			cargo,
+			DATE_FORMAT(fecha_ingreso,'%d/%m/%Y')fecha_ingreso,
+			DATE_FORMAT(fecha_cese,'%d/%m/%Y')fecha_cese
+
+
+		"))
+	->where('estado_pdf',0)->get();
+
+	foreach ($documentos as $key => $value) {
+
+		$dompdf = new Dompdf();
+
+		$html   = view('certificado',compact('value'));
+
+		$dompdf->loadHtml($html);
+
+		// (Optional) Setup the paper size and orientation
+		$dompdf->setPaper('A4', 'letter');
+
+		// Render the HTML as PDF
+		$dompdf->render();
+
+		//OutPut
+		$output = $dompdf->output();
+
+		$path  = 'documentos/certificados/'.$value->dni.'.pdf';
+		Storage::put($path, $output,'public');
+
+		DB::table('certificados')->where('id',$value->id)
+		->update(['url_documento'=>$path,'updated_at'=>Carbon::now()]);
+
+		echo "Documento Generado => ".$path."\n";
+
+
+
+	}
+
+
+
 
 
 
 });
-
 
