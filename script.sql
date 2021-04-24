@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-04-2021 a las 18:14:19
+-- Tiempo de generación: 24-04-2021 a las 19:07:11
 -- Versión del servidor: 10.4.18-MariaDB
 -- Versión de PHP: 7.3.27
 
@@ -20,6 +20,37 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `documentos_digitales`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `certificados`
+--
+
+CREATE TABLE `certificados` (
+  `id` int(11) NOT NULL,
+  `empresa` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ruc` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `trabajador` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `dni` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cargo` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fecha_ingreso` date NOT NULL,
+  `fecha_cese` date NOT NULL,
+  `url_documento` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `correo` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `estado_pdf` int(11) NOT NULL DEFAULT 0,
+  `estado_correo` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `certificados`
+--
+
+INSERT INTO `certificados` (`id`, `empresa`, `ruc`, `trabajador`, `dni`, `cargo`, `fecha_ingreso`, `fecha_cese`, `url_documento`, `correo`, `estado_pdf`, `estado_correo`, `created_at`, `updated_at`) VALUES
+(1, 'PERUTEC', '12345678901', 'LUIS CLAUDIO PONCE', '46794282', 'ANALISTA DE SITEMAS', '2019-01-01', '2020-09-01', 'documentos/certificados/46794282.pdf', 'luis.claudio@perutec.com.pe', 1, 0, '2021-04-24 16:05:49', '2021-04-24 16:35:09'),
+(2, 'PERUTEC', '12345678901', 'OMAR MORI', '12340099', 'PROGRAMADOR', '2018-01-01', '2021-01-01', 'documentos/certificados/12340099.pdf', 'omar.mori@gmail.com', 1, 0, '2021-04-24 16:05:49', '2021-04-24 16:35:09');
 
 -- --------------------------------------------------------
 
@@ -290,6 +321,12 @@ INSERT INTO `users` (`id`, `nombres`, `apellidos`, `document_number`, `email`, `
 --
 
 --
+-- Indices de la tabla `certificados`
+--
+ALTER TABLE `certificados`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `documentos`
 --
 ALTER TABLE `documentos`
@@ -371,6 +408,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
+
+--
+-- AUTO_INCREMENT de la tabla `certificados`
+--
+ALTER TABLE `certificados`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `documentos`
