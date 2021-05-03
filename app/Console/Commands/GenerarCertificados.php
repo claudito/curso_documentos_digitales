@@ -58,6 +58,7 @@ class GenerarCertificados extends Command
 
         "))
     ->where('estado_pdf',0)
+    ->limit( config('sitio.limit_generacion_pdf')  )
     ->get();
 
     foreach ($documentos as $key => $value) {

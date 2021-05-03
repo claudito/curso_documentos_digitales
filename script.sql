@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-04-2021 a las 19:07:11
+-- Tiempo de generación: 03-05-2021 a las 19:11:41
 -- Versión del servidor: 10.4.18-MariaDB
 -- Versión de PHP: 7.3.27
 
@@ -49,8 +49,39 @@ CREATE TABLE `certificados` (
 --
 
 INSERT INTO `certificados` (`id`, `empresa`, `ruc`, `trabajador`, `dni`, `cargo`, `fecha_ingreso`, `fecha_cese`, `url_documento`, `correo`, `estado_pdf`, `estado_correo`, `created_at`, `updated_at`) VALUES
-(1, 'PERUTEC', '12345678901', 'LUIS CLAUDIO PONCE', '46794282', 'ANALISTA DE SITEMAS', '2019-01-01', '2020-09-01', 'documentos/certificados/46794282.pdf', 'luis.claudio@perutec.com.pe', 1, 0, '2021-04-24 16:05:49', '2021-04-24 16:35:09'),
-(2, 'PERUTEC', '12345678901', 'OMAR MORI', '12340099', 'PROGRAMADOR', '2018-01-01', '2021-01-01', 'documentos/certificados/12340099.pdf', 'omar.mori@gmail.com', 1, 0, '2021-04-24 16:05:49', '2021-04-24 16:35:09');
+(1, 'PERUTEC', '12345678901', 'LUIS CLAUDIO PONCE', '46794282', 'ANALISTA DE SITEMAS', '2019-01-01', '2020-09-01', 'documentos/certificados/46794282.pdf', 'luis.claudio@perutec.com.pe', 1, 1, '2021-04-24 16:05:49', '2021-05-01 14:42:51'),
+(2, 'PERUTEC', '12345678901', 'OMAR MORI', '12340099', 'PROGRAMADOR', '2018-01-01', '2021-01-01', 'documentos/certificados/12340099.pdf', 'carlosmorih33@gmail.com', 1, 1, '2021-04-24 16:05:49', '2021-05-01 14:42:51'),
+(3, 'PERUTEC', '12345678901', 'GUSTAVO MIRANDA', '12340777', 'PROGRAMADOR', '2018-01-01', '2021-01-01', 'documentos/certificados/12340777.pdf', 'gustavo.sistemas2@qgmail.com', 1, 1, '2021-04-24 16:05:49', '2021-05-01 14:42:52'),
+(4, 'PERUTEC', '12345678901', 'CRISTIAN VARGAS', '123407468', 'PROGRAMADOR', '2018-01-01', '2021-01-01', 'documentos/certificados/123407468.pdf', 'cvargas1477@gmail.com', 1, 1, '2021-04-24 16:05:49', '2021-05-01 14:42:52');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `configuracion_correo`
+--
+
+CREATE TABLE `configuracion_correo` (
+  `id` int(11) NOT NULL,
+  `driver` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `host` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `port` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `encryption` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email_reply` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email_cc` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `configuracion_correo`
+--
+
+INSERT INTO `configuracion_correo` (`id`, `driver`, `host`, `port`, `username`, `password`, `encryption`, `address`, `name`, `email_reply`, `email_cc`, `created_at`, `updated_at`) VALUES
+(1, 'SMTP', 'smtp.gmail.com', '587', 'tallerlaravel7notificaciones@gmail.com', 'taller2021', 'tls', 'tallerlaravel7notificaciones@gmail.com', 'tallerlaravel7notificaciones@gmail.com', 'tallerlaravel7notificaciones@gmail.com', 'tallerlaravel7notificaciones@gmail.com', '2021-05-01 15:49:05', '2021-05-01 15:49:05');
 
 -- --------------------------------------------------------
 
@@ -218,6 +249,13 @@ CREATE TABLE `password_resets` (
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `password_resets`
+--
+
+INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
+('luis.claudio@perutec.com.pe', '$2y$10$XhKXg2zaZ07e5h7BdX4jG.S4SAasJGl85WS73IHS3UujEgGIEMS2S', '2021-05-01 14:06:16');
+
 -- --------------------------------------------------------
 
 --
@@ -285,6 +323,28 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `sitio_configuraciones`
+--
+
+CREATE TABLE `sitio_configuraciones` (
+  `nombre` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `descripcion` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `valor` text COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `sitio_configuraciones`
+--
+
+INSERT INTO `sitio_configuraciones` (`nombre`, `descripcion`, `valor`) VALUES
+('correos_copia', 'Correos a los cuales se les envía copia', 'cvargas1477@gmail.com,carlosmorih33@gmail.com,gustavo.sistemas20@gmail.com'),
+('from_correo', 'nombre de correo', 'tallerlaravel7notificaciones@gmail.com'),
+('limit_envio_correo', 'Valor limite de registros ', '2'),
+('limit_generacion_pdf', 'Valor limite de registros ', '1');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `users`
 --
 
@@ -324,6 +384,12 @@ INSERT INTO `users` (`id`, `nombres`, `apellidos`, `document_number`, `email`, `
 -- Indices de la tabla `certificados`
 --
 ALTER TABLE `certificados`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `configuracion_correo`
+--
+ALTER TABLE `configuracion_correo`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -398,6 +464,12 @@ ALTER TABLE `role_has_permissions`
   ADD KEY `role_has_permissions_role_id_foreign` (`role_id`);
 
 --
+-- Indices de la tabla `sitio_configuraciones`
+--
+ALTER TABLE `sitio_configuraciones`
+  ADD PRIMARY KEY (`nombre`);
+
+--
 -- Indices de la tabla `users`
 --
 ALTER TABLE `users`
@@ -413,7 +485,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `certificados`
 --
 ALTER TABLE `certificados`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `documentos`

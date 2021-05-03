@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Dompdf\Dompdf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EnviarCertificado;
 
 
 Route::get('pruebas/roles_permisos',function(){
@@ -151,57 +153,78 @@ Route::post('pruebas/spaces/subir',function(Request $request){
 })->name('spaces.subir');
 
 
-Route::get('pruebas/dompdf',function(){
+	Route::get('pruebas/dompdf',function(){
 
-	$documentos = DB::table('certificados')
-	->select(DB::raw("
+		$documentos = DB::table('certificados')
+		->select(DB::raw("
 
-			id,
-			empresa,
-			ruc,
-			trabajador,
-			dni,
-			cargo,
-			DATE_FORMAT(fecha_ingreso,'%d/%m/%Y')fecha_ingreso,
-			DATE_FORMAT(fecha_cese,'%d/%m/%Y')fecha_cese
-
-
-		"))
-	->where('estado_pdf',0)->get();
-
-	foreach ($documentos as $key => $value) {
-
-		$dompdf = new Dompdf();
-
-		$html   = view('certificado',compact('value'));
-
-		$dompdf->loadHtml($html);
-
-		// (Optional) Setup the paper size and orientation
-		$dompdf->setPaper('A4', 'letter');
-
-		// Render the HTML as PDF
-		$dompdf->render();
-
-		//OutPut
-		$output = $dompdf->output();
-
-		$path  = 'documentos/certificados/'.$value->dni.'.pdf';
-		Storage::put($path, $output,'public');
-
-		DB::table('certificados')->where('id',$value->id)
-		->update(['url_documento'=>$path,'updated_at'=>Carbon::now()]);
-
-		echo "Documento Generado => ".$path."\n";
+				id,
+				empresa,
+				ruc,
+				trabajador,
+				dni,
+				cargo,
+				DATE_FORMAT(fecha_ingreso,'%d/%m/%Y')fecha_ingreso,
+				DATE_FORMAT(fecha_cese,'%d/%m/%Y')fecha_cese
 
 
+			"))
+		->where('estado_pdf',0)->get();
 
-	}
+		foreach ($documentos as $key => $value) {
+
+			$dompdf = new Dompdf();
+
+			$html   = view('certificado',compact('value'));
+
+			$dompdf->loadHtml($html);
+
+			// (Optional) Setup the paper size and orientation
+			$dompdf->setPaper('A4', 'letter');
+
+			// Render the HTML as PDF
+			$dompdf->render();
+
+			//OutPut
+			$output = $dompdf->output();
+
+			$path  = 'documentos/certificados/'.$value->dni.'.pdf';
+			Storage::put($path, $output,'public');
+
+			DB::table('certificados')->where('id',$value->id)
+			->update(['url_documento'=>$path,'updated_at'=>Carbon::now()]);
+
+			echo "Documento Generado => ".$path."\n";
 
 
 
+		}
+
+	});
 
 
+	Route::get('pruebas/correo',function(){
 
-});
+		$data = (object) [
+
+			'trabajador'=>'Luis Claudio',
+			'correo' => 'luis.claudio@perutec.com.pe'
+
+		];
+
+		//Enviar correo
+		Mail::to( $data->correo  )->send( new EnviarCertificado( $data ) );
+
+
+	});
+
+	Route::get('pruebas/sitio_configuraciones',function(){
+
+
+		$cc = explode(',', config('sitio.correos_copia') );
+
+		dd( $cc );
+
+
+	});
 

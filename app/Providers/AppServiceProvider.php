@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use DB;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+
+        // Guardar valores de las configuraciones del sitio
+        $configuraciones = DB::table('sitio_configuraciones')->get();
+
+
+        foreach ($configuraciones as $key => $value) {
+
+           \Config::set('sitio.' . $value->nombre, $value->valor);
+           
+        }
+
+
+
     }
 
     /**

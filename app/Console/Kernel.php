@@ -28,9 +28,16 @@ class Kernel extends ConsoleKernel
 
        // $schedule->command('documento:generar_certificados')->hourly();
          $schedule->command('documento:generar_certificados')
-         ->everyMinute()
+         //->everyMinute()
+         ->hourly()
          ->timezone('America/Lima')
          ->name('documento_generar_certificados');
+
+         $schedule->command('documento:enviar_certificado')
+         ->hourly()
+         ->timezone('America/Lima')
+         ->name('documento_enviar_certificado');
+
 
     }
 
