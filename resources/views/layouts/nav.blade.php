@@ -26,6 +26,8 @@
                         <a class="dropdown-item" href="#">Reportes</a>
                     @endcan
 
+                        <a class="dropdown-item" href="{{ route('importacion.index') }}">Importacion</a>
+
                      
                 </div>
             </li>
