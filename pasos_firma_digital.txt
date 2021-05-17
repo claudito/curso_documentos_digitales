@@ -1,0 +1,12 @@
+Libreria de Generacion de PDF=>TCPDF(Signature)
+https://tcpdf.org/examples/example_052/
+
+Documentación  PDF Signature integración con Laravel
+https://hackthestuff.com/article/laravel6-add-digital-signature-certification-in-pdf
+
+Convertir Pfx a PEM
+https://github.com/thegreenter/xmldsig
+https://github.com/thegreenter/xmldsig/blob/master/CONVERT.md
+
+Generación de Qr
+"simplesoftwareio/simple-qrcode": "~2"

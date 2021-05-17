@@ -8,6 +8,9 @@ use Dompdf\Dompdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EnviarCertificado;
+use Greenter\XMLSecLibs\Certificate\X509Certificate;
+use Greenter\XMLSecLibs\Certificate\X509ContentType;
+use Elibyy\TCPDF\Facades\TCPDF as PDFSignature;
 
 
 Route::get('pruebas/roles_permisos',function(){
@@ -228,3 +231,97 @@ Route::post('pruebas/spaces/subir',function(Request $request){
 
 	});
 
+
+	Route::get('pruebas/pfx_a_pem',function(){
+
+		$pfx = file_get_contents('firmas/46794282.pfx');
+		$password = '********';
+
+		$certificate = new X509Certificate($pfx, $password);
+		$pem = $certificate->export(X509ContentType::PEM);
+		    
+		file_put_contents('certificate_46794282.pem', $pem);
+
+		dd('okey');
+
+
+	});
+
+
+	Route::get('pruebas/firma_pdf',function(){
+
+		$firma =  DB::table('firmas_digitales')->where('id',1)->first();
+
+        // set certificate file
+        $certificate = $firma->pem;
+
+        // set additional information in the signature
+        $info = array(
+            'Name' => 'TCPDF',
+            'Location' => 'Lima,Perú '.Carbon::now()->format('Y-m-d H:i:s'),
+            'Reason' => 'Prueba de Firma de digital',
+            'ContactInfo' => 'http://www.tcpdf.org',
+        );
+
+        // set document signature
+        PDFSignature::setSignature($certificate, $certificate, 'tcpdfdemo', '', 2, $info);
+        
+        PDFSignature::SetFont('helvetica', '', 12);
+        PDFSignature::SetTitle('Documento de Prueba');
+        PDFSignature::AddPage();
+
+        // print a line of text
+
+	    $texto_qr  = "NIF: Gerente - DNI 46794282"."\n";
+	    $texto_qr .= "Código Pais: PE"."\n";
+	    $texto_qr .= "Nombre Común: Luis Augusto Claudio Ponce"."\n";
+	    $texto_qr .= "Número de Serie: 4FA147620A2810FD"."\n";
+	    $texto_qr .= "Tipo de Certificado: DNI 46794282"."\n";
+	    $texto_qr .= "Entidad Emisora: Llama.pe SHA256 Standard CA LLAMA.PE"."\n";
+	    $texto_qr .= "Inicio: 14/05/2021"."\n";
+	    $texto_qr .= "Fin: 14/05/2022"."\n";
+
+	    $fecha_actual = Carbon::now()->format('Y-m-d H:i:s');
+        $text = view('template_pdf',compact('texto_qr','firma','fecha_actual'));
+
+        // add view content
+        PDFSignature::writeHTML($text, true, 0, true, 0);
+
+        // add image for signature
+        //PDFSignature::Image('tcpdf.png', 180, 60, 15, 15, 'PNG');
+        
+        // define active area for signature appearance
+        PDFSignature::setSignatureAppearance(180, 60, 15, 15);
+        
+        // save pdf file
+        PDFSignature::Output(public_path('documento_prueba.pdf'), 'F');
+
+        #Subir el archivo a Space DO
+		//$file 	   = PDFSignature::Output('contrato.pdf','S');//PDF Firmado Digitalmente
+		//$file_name =  "documento.pdf";
+		//Storage::disk('spaces')->put($file_name, $file,'public');
+
+        PDFSignature::reset();
+
+        dd('pdf created');
+
+
+
+	});
+
+
+	Route::get('pruebas/qr',function(){
+
+	    $texto_qr  = "NIF: Gerente - DNI 46794282"."\n";
+	    $texto_qr .= "Código Pais: PE"."\n";
+	    $texto_qr .= "Nombre Común: Luis Augusto Claudio Ponce"."\n";
+	    $texto_qr .= "Número de Serie: 4FA147620A2810FD"."\n";
+	    $texto_qr .= "Tipo de Certificado: DNI 46794282"."\n";
+	    $texto_qr .= "Entidad Emisora: Llama.pe SHA256 Standard CA LLAMA.PE"."\n";
+	    $texto_qr .= "Inicio: 14/05/2021"."\n";
+	    $texto_qr .= "Fin: 14/05/2022"."\n";
+
+
+	    return view('qr',compact('texto_qr'));
+
+	});
