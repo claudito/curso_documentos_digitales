@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-05-2021 a las 19:11:41
--- Versión del servidor: 10.4.18-MariaDB
--- Versión de PHP: 7.3.27
+-- Tiempo de generación: 17-05-2021 a las 17:03:20
+-- Versión del servidor: 10.4.19-MariaDB
+-- Versión de PHP: 7.3.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -122,6 +122,35 @@ CREATE TABLE `failed_jobs` (
   `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `firmas_digitales`
+--
+
+CREATE TABLE `firmas_digitales` (
+  `id` int(11) NOT NULL,
+  `nif` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `codigo_pais` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nombre_comun` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cargo` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `numero_serie` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tipo_certificado` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `entidad_emisora` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fecha_inicio` date NOT NULL,
+  `fecha_fin` date NOT NULL,
+  `pem` blob NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `firmas_digitales`
+--
+
+INSERT INTO `firmas_digitales` (`id`, `nif`, `codigo_pais`, `nombre_comun`, `cargo`, `numero_serie`, `tipo_certificado`, `entidad_emisora`, `fecha_inicio`, `fecha_fin`, `pem`, `created_at`, `updated_at`) VALUES
+(1, 'Gerente - DNI 46794282', 'PE', 'Luis Augusto Claudio Ponce', 'Gerente', '4FA147620A2810FD', 'DNI 46794282', 'Llama.pe SHA256 Standard CA LLAMA.PE', '2021-05-14', '2022-05-14', '', '2021-05-16 02:02:47', '2021-05-16 02:02:47');
 
 -- --------------------------------------------------------
 
@@ -405,6 +434,12 @@ ALTER TABLE `failed_jobs`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `firmas_digitales`
+--
+ALTER TABLE `firmas_digitales`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `log_errors`
 --
 ALTER TABLE `log_errors`
@@ -498,6 +533,12 @@ ALTER TABLE `documentos`
 --
 ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `firmas_digitales`
+--
+ALTER TABLE `firmas_digitales`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `log_errors`
