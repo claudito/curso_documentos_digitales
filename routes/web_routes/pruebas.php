@@ -8,6 +8,7 @@ use Dompdf\Dompdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EnviarCertificado;
+use PDF as PDFSignature;
 
 
 Route::get('pruebas/roles_permisos',function(){
@@ -228,3 +229,55 @@ Route::post('pruebas/spaces/subir',function(Request $request){
 
 	});
 
+
+
+	Route::get('pruebas/firma_pdf',function(){
+
+		$firma =  DB::table('firmas_digitales')->where('id',1)->first();
+
+        // set certificate file
+        $certificate = $firma->pem;
+
+        // set additional information in the signature
+        $info = array(
+            'Name' => 'TCPDF',
+            'Location' => 'Lima,Perú '.Carbon::now()->format('Y-m-d H:i:s'),
+            'Reason' => 'Prueba de Firma de digital',
+            'ContactInfo' => 'http://www.tcpdf.org',
+        );
+
+        // set document signature
+        PDFSignature::setSignature($certificate, $certificate, 'tcpdfdemo', '', 2, $info);
+        
+        PDFSignature::SetFont('helvetica', '', 12);
+        PDFSignature::SetTitle('Documento de Prueba');
+        PDFSignature::AddPage();
+
+        // print a line of text
+
+	    $fecha_actual = Carbon::now()->format('Y-m-d H:i:s');
+        $text = view('template',compact('firma','fecha_actual'));
+
+        // add view content
+        PDFSignature::writeHTML($text, true, 0, true, 0);
+
+        // add image for signature
+        PDFSignature::Image(public_path('img/tcpdf_signature.png'), 15, 5, 15, 15, 'PNG');
+        
+        // define active area for signature appearance
+        PDFSignature::setSignatureAppearance(15, 5, 15, 15);
+        
+        // save pdf file
+        //PDFSignature::Output(public_path('documento_prueba.pdf'), 'F');
+
+        #Subir el archivo a Space DO
+		$file 	   = PDFSignature::Output('documento_prueba.pdf','S');//PDF Firmado Digitalmente
+		$file_name =  "documentos/certificados/documento_prueba.pdf";
+		Storage::put($file_name, $file,'public');
+
+		//Reset
+        PDFSignature::reset();
+
+        dd('pdf created');
+
+	});

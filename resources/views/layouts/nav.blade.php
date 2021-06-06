@@ -28,6 +28,8 @@
 
                         <a class="dropdown-item" href="{{ route('importacion.index') }}">Importacion</a>
 
+                        <a class="dropdown-item" href="{{ route('certificados.index') }}">Certificados</a>
+
                      
                 </div>
             </li>

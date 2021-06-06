@@ -49,12 +49,12 @@ class EnviarCertificado extends Command
         ->limit( config('sitio.limit_envio_correo')  )
         ->get();
 
-        if( count($certificados) == 0  ){
+        /*if( count($certificados) == 0  ){
 
             echo "La lista esta vacía no hay documentos pendientes de envío"."\n";
 
             return false;
-        }
+        }*/
 
         $helper = new Helper();
 
@@ -63,8 +63,7 @@ class EnviarCertificado extends Command
             //Enviar correo
             \Config::set('mail', $helper->configCorreo() );
             Mail::to( $value->correo  )->send( new EnviarCertificadoCorreo( $value ) );
-            echo "Correo Enviado: =>".$value->trabajador."\n";
-
+            //echo "Correo Enviado: =>".$value->trabajador."\n";
             DB::table('certificados')->where('id',$value->id)->update(['estado_correo'=>1]);
 
         }

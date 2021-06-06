@@ -84,9 +84,7 @@ class GenerarCertificados extends Command
         DB::table('certificados')->where('id',$value->id)
         ->update(['url_documento'=>$path,'estado_pdf'=>1,'updated_at'=>Carbon::now()]);
 
-        echo "Documento Generado => ".$path."\n";
-
-
+        //echo "Documento Generado => ".$path."\n";
 
     }
 

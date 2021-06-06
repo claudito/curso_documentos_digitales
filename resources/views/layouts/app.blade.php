@@ -21,7 +21,15 @@
     <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
 
+    <style>
+            
+        .style_td{
+            font-size: 11px;
 
+        }
+
+
+    </style>
 </head>
 <body>
     <div id="app">
@@ -53,6 +61,11 @@
 <!-- FontAwesome -->
 <script src="https://use.fontawesome.com/4ffda11bf1.js"></script>
 
+<script>
+    
+    $('body').tooltip({selector: '[data-toggle="tooltip"]'});
+
+</script>
 
 @yield('scripts')
 </body>
