@@ -56,3 +56,9 @@ https://github.com/thegreenter/xmldsig/blob/master/CONVERT.md
 
 
 Tv6mdULs1fCw
+
+CREATE USER 'demo'@'%' IDENTIFIED BY '?22Tv6mdULs1fCw33??';
+
+GRANT ALL PRIVILEGES ON * . * TO 'demo'@'%';
+
+FLUSH PRIVILEGES;
