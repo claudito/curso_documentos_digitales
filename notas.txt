@@ -62,3 +62,15 @@ CREATE USER 'demo'@'%' IDENTIFIED BY '?22Tv6mdULs1fCw33??';
 GRANT ALL PRIVILEGES ON * . * TO 'demo'@'%';
 
 FLUSH PRIVILEGES;
+
+
+
+mP6ebF6LXHch
+
+
+
+CREATE USER 'demo'@'%' IDENTIFIED BY '??mP6ebF6LXHch??';
+
+GRANT ALL PRIVILEGES ON * . * TO 'demo'@'%';
+
+FLUSH PRIVILEGES;

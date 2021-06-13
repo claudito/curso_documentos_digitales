@@ -30,6 +30,8 @@
 
                         <a class="dropdown-item" href="{{ route('certificados.index') }}">Certificados</a>
 
+                        <a class="dropdown-item" href="{{ route('backup.index') }}">Backup</a>
+
                      
                 </div>
             </li>

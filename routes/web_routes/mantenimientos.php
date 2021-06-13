@@ -19,6 +19,9 @@ Route::middleware('auth','role:admin')->group(function(){//Seguridad
 		Route::get('importacion','ImportacionController@index')->name('importacion.index');
 
 
+		//Backup
+		Route::resource('backup','BackupController');
+
 
 	});
 
