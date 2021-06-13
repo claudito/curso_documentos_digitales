@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class BackupController extends Controller
 {
@@ -15,7 +17,29 @@ class BackupController extends Controller
     {
         if( $request->ajax() ){
 
-            return ['data'=>[] ];
+            $directorio = "backup";
+            $files      = Storage::files($directorio);
+
+            $data       = [];
+
+            foreach ($files as $key => $value) {
+
+                $fecha_backup = str_replace(['.zip','backup/'], ['',''], $value);
+                $fecha        = substr($fecha_backup, 0,10);
+                $hora         = substr($fecha_backup,11,8);
+                $hora         = str_replace(['-'], [':'], $hora);
+                $formato      = Carbon::parse($fecha.' '.$hora )->format('d/m/Y H:i:s');
+                
+                $data[] = [
+
+                    'id'    =>$key+1,
+                    'nombre'=>$value,
+                    'fecha' =>$formato
+
+                ];
+            }
+
+            return ['data'=>$data ];
         }
 
         return view('backup.index');
@@ -39,7 +63,18 @@ class BackupController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $nombre =  $request->nombre;
+        Storage::setVisibility($nombre,'public');
+
+        return [
+
+            'title' => 'Backup Generado',
+            'text'  => '',
+            'url'   => env('DO_URL').'/'.$nombre,
+            'icon'  =>'success'
+
+        ];
+
     }
 
     /**

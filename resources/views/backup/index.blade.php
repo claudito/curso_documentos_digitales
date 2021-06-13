@@ -13,7 +13,7 @@ Backups
 						<thead>
 							<tr>
 								<th>Id</th>
-								<th>Backup</th>
+								<th>Nombre</th>
 								<th>Fecha de Creación</th>
 								<th>Acciones</th>
 							</tr>
@@ -50,10 +50,61 @@ Backups
 		},
 		columns:[
 
-			{ data:null }
+			{ data:'id' },
+			{ data:'nombre'},
+			{ data:'fecha'},
+			{ data:null,render:function(data){
+
+
+				return `<button data-nombre="${data.nombre}" type="button" class="btn btn-primary btn-sm btn-export"><i class="fa fa-download" aria-hidden="true"></i></button>`;
+
+			}}
 
 		]
 
+
+	});
+
+	//Exportar
+	$(document).on('click','.btn-export',function(e){
+
+		nombre = $(this).data('nombre');
+		
+		$.ajax({
+
+			url:'{{ route('backup.store') }}',
+			type:'POST',
+			data:{'nombre':nombre,'_token':'{{ csrf_token() }}' },
+			dataType:'JSON',
+			beforeSend:function(){
+
+				Swal.fire({
+
+					title:'Generando Archivo',
+					text :'Espere un momento...',
+					imageUrl:'{{ asset('img/loader.gif') }}',
+					showConfirmButton:false
+
+				});
+
+			},
+			success:function(data){
+
+				Swal.fire({
+
+					title:data.title,
+					icon :data.icon,
+					html :`<a href="${data.url}">Descargar Backup</a>`,
+					showConfirmButton:false
+
+
+				});
+
+
+			}
+
+
+		});
 
 	});
 
