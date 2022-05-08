@@ -238,6 +238,8 @@ Route::post('pruebas/spaces/subir',function(Request $request){
         // set certificate file
         $certificate = $firma->pem;
 
+        //dd( $certificate );
+
         // set additional information in the signature
         $info = array(
             'Name' => 'TCPDF',
@@ -245,6 +247,8 @@ Route::post('pruebas/spaces/subir',function(Request $request){
             'Reason' => 'Prueba de Firma de digital',
             'ContactInfo' => 'http://www.tcpdf.org',
         );
+
+        //dd($info );
 
         // set document signature
         PDFSignature::setSignature($certificate, $certificate, 'tcpdfdemo', '', 2, $info);
@@ -268,16 +272,25 @@ Route::post('pruebas/spaces/subir',function(Request $request){
         PDFSignature::setSignatureAppearance(15, 5, 15, 15);
         
         // save pdf file
-        //PDFSignature::Output(public_path('documento_prueba.pdf'), 'F');
+        PDFSignature::Output(public_path('documento_prueba_parcial.pdf'), 'F');
 
         #Subir el archivo a Space DO
-		$file 	   = PDFSignature::Output('documento_prueba.pdf','S');//PDF Firmado Digitalmente
-		$file_name =  "documentos/certificados/documento_prueba.pdf";
-		Storage::put($file_name, $file,'public');
+		//$file 	   = PDFSignature::Output('documento_prueba.pdf','S');//PDF Firmado Digitalmente
+		//$file_name =  "documentos/certificados/documento_prueba.pdf";
+		//Storage::put($file_name, $file,'public');
 
 		//Reset
         PDFSignature::reset();
 
         dd('pdf created');
+
+	});
+
+
+
+	Route::get('pruebas/qr_tcpdf',function(){
+
+
+		dd('demo');
 
 	});

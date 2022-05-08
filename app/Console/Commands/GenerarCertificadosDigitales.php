@@ -7,6 +7,7 @@ use PDF as PDFSignature;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Storage;
+use App\Models\FirmaDigital;
 
 class GenerarCertificadosDigitales extends Command
 {
@@ -86,11 +87,16 @@ class GenerarCertificadosDigitales extends Command
             PDFSignature::writeHTML($text, true, 0, true, 0);
 
             // add image for signature
-            PDFSignature::Image(public_path('img/tcpdf_signature.png'), 15, 5, 15, 15, 'PNG');
+            //PDFSignature::Image(public_path('img/tcpdf_signature.png'), 15, 5, 15, 15, 'PNG');
             
             // define active area for signature appearance
             PDFSignature::setSignatureAppearance(15, 5, 15, 15);
-            
+
+            // Add QRCODE,L
+            $texto_qr = FirmaDigital::getDatosFirma(1);
+                                                             // Left,Top,Ancho,largo 
+            PDFSignature::write2DBarcode($texto_qr, 'QRCODE,L', 15, 5, 30, 30, [], 'N');
+
             // save pdf file
             #Subir el archivo a Space DO
             $file      = PDFSignature::Output($value->dni.'.pdf','S');//PDF Firmado Digitalmente
@@ -103,7 +109,7 @@ class GenerarCertificadosDigitales extends Command
             //Reset
             PDFSignature::reset();
 
-            echo "PDF Generado".$value->trabajador."\n";
+           // echo "PDF Generado".$value->trabajador."\n";
 
 
         }

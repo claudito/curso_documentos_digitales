@@ -43,7 +43,7 @@ class CertificadoController extends Controller
      */
     public function store(Request $request)
     {   
-        \Artisan::call('documento:generar_certificados');
+        \Artisan::call('documento:generar_certificados_digitales');
         \Artisan::call('documento:enviar_certificado');
         return $this->getMessage(5);
     }
